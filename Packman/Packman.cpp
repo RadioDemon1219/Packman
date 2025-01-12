@@ -133,7 +133,7 @@ public:
 							found_empty_space = true;
 						}
 						else {
-							rotate[i] = (rotate[i] % 4) + 1; 						}
+							rotate[i] = (rotate[i] % 4) + 1;}
 						break;
 					case 2:
 						if (tileMap[y[i]][newx[i] - 1] != 'A') {
@@ -234,8 +234,8 @@ int main() {
 
 	Texture pictureYouLoose;
 	pictureYouLoose.loadFromFile("../Paint/youlose.png");
-	Sprite youlose(pictureYouLoose);
-	youlose.setPosition(100, 210);
+	Sprite youloose(pictureYouLoose);
+	youloose.setPosition(100, 210);
 
 	Player player;
 	Enemy enemy;
@@ -304,7 +304,7 @@ int main() {
 		if (coins == 171)
 			window.draw(youwin);
 		if (!life)
-			window.draw(youlose);
+			window.draw(youloose);
 
 		window.display();
 	}
