@@ -6,9 +6,9 @@ using namespace sf;
 const int heightOfMap = 21;
 const int widthOfMap = 19;
 
-const int ts = 25;
+const int sizeOfPlate = 25;
 
-int q = 0;
+int coins = 0;
 bool life = true;
 
 String tileMap[heightOfMap] = {
@@ -38,18 +38,19 @@ String tileMap[heightOfMap] = {
 
 class Player {
 public:
-	float frame = 0;
+	float frameOfPackman = 0;
 	int x = 9, y = 15;
 	int newx = 0, newy = 0;
-	int rotate = 1, ti = 0;
+	int rotate = 1, delayOfStep = 0;
 
 	void update() {
-		frame += 0.01;
-		if (frame > 5)
-			frame -= 5;
+		frameOfPackman += 0.01;
+		if (frameOfPackman > 5)
+			frameOfPackman -= 5;
 
-		ti++;
-		if (ti >= 900) {
+        //движение игрока
+		delayOfStep++;
+		if (delayOfStep >= 900) {
 			switch (rotate)
 			{
 			case 1:
@@ -70,12 +71,13 @@ public:
 				break;
 			}
 
-			ti = 0;
+			delayOfStep = 0;
 		}
 
+	    //сбор монет игроком
 		if (tileMap[newy][newx] == ' ' || tileMap[newy][newx] == 'B') {
 			if (tileMap[newy][newx] == ' ')
-				q++;
+				coins++;
 
 			if (tileMap[newy][newx] == '1'
 				|| tileMap[newy][newx] == '2' || tileMap[newy][newx] == '3' || tileMap[newy][newx] == '4')
@@ -89,6 +91,7 @@ public:
 			y = newy;
 		}
 
+		//переход из одного края карты в другой
 		if (newy == 9 && (newx == 0 || newx == 18)) {
 			if (newx == 0)
 				newx = 17;
@@ -108,12 +111,12 @@ class Enemy {
 public:
 	int x[4] = { 1, 17 , 1, 17 }, y[4] = { 1, 1, 19, 19 };
 	int newx[4] = { 0 , 0 , 0, 0 }, newy[4] = { 0, 0, 0, 0 };
-	int rotate[4] = { 1, 1, 1, 1 }, ti = 0;
+	int rotate[4] = { 1, 1, 1, 1 }, delayOfStep = 0;
 
 	void update() {
-		ti++;
+		delayOfStep++;
 
-		if (ti >= 950) {
+		if (delayOfStep >= 900) {
 			for (int i = 0; i < 4; i++) {
 				rotate[i] = rand() % 4 + 1;
 
@@ -121,7 +124,7 @@ public:
 				newy[i] = y[i];
 
 				bool found_empty_space = false;
-
+				//передвижение врагов
 				while (!found_empty_space) {
 					switch (rotate[i]) {
 					case 1:
@@ -165,7 +168,7 @@ public:
 			}
 
 
-			ti = 0;
+			delayOfStep = 0;
 		}
 
 		for (int i = 0; i < 4; i++) {
@@ -190,7 +193,7 @@ public:
 				x[i] = newx[i];
 				y[i] = newy[i];
 			}
-
+			//переход из одного края карты в другой
 			if (newy[i] == 9 && (newx[i] == 0 || newx[i] == 18)) {
 				if (newx[i] == 0)
 					newx[i] = 17;
@@ -218,24 +221,24 @@ public:
 int main() {
 	srand(time(0));
 
-	RenderWindow window(VideoMode(widthOfMap * ts, heightOfMap * ts), "Maze!"); 
+	RenderWindow window(VideoMode(widthOfMap * sizeOfPlate, heightOfMap * sizeOfPlate), "Maze!"); 
 
-	Texture t;
-	t.loadFromFile("../Paint/title.png");
-	Sprite plat(t);
+	Texture mapGame;
+	mapGame.loadFromFile("../Paint/title.png");
+	Sprite plat(mapGame);
 
-	Texture yw;
-	yw.loadFromFile("../Paint/youwin.png");
-	Sprite youwin(yw);
+	Texture pictureYouWin;
+	pictureYouWin.loadFromFile("../Paint/youwin.png");
+	Sprite youwin(pictureYouWin);
 	youwin.setPosition(100, 210);
 
-	Texture yl;
-	yl.loadFromFile("../Paint/youlose.png");
-	Sprite youlose(yl);
+	Texture pictureYouLoose;
+	pictureYouLoose.loadFromFile("../Paint/youlose.png");
+	Sprite youlose(pictureYouLoose);
 	youlose.setPosition(100, 210);
 
-	Player p;
-	Enemy en;
+	Player player;
+	Enemy enemy;
 
 	while (window.isOpen())
 	{
@@ -244,67 +247,66 @@ int main() {
 		{
 			if (event.type == Event::Closed)
 				window.close();
-
-			if (q < 171 && life)
+			//управление игроком
+			if (coins < 171 && life)
 				if (event.type == Event::KeyPressed) {
-					p.newx = p.x;
-					p.newy = p.y;
+					player.newx = player.x;
+					player.newy = player.y;
 
 					if (event.key.code == Keyboard::Right)
-						p.rotate = 1;
+						player.rotate = 1;
 					else if(event.key.code == Keyboard::D)
-						p.rotate = 1;
+						player.rotate = 1;
 					if (event.key.code == Keyboard::Left)
-						p.rotate = 2;
+						player.rotate = 2;
 					else if (event.key.code == Keyboard::A)
-						p.rotate = 2;
+						player.rotate = 2;
 					if (event.key.code == Keyboard::Up)
-						p.rotate = 3;
+						player.rotate = 3;
 					else if (event.key.code == Keyboard::W)
-						p.rotate = 3;
+						player.rotate = 3;
 					if (event.key.code == Keyboard::Down)
-						p.rotate = 4;
+						player.rotate = 4;
 					else if (event.key.code == Keyboard::S)
-						p.rotate = 4;
+						player.rotate = 4;
 				}
 		}
 
-		if (q < 171 && life) {
-			p.update();
-			en.update();
+		if (coins < 171 && life) {
+			player.update();
+			enemy.update();
 		}
 		window.clear(Color::Black);
-
+		//преображение карты
 		for (int i = 0; i < heightOfMap; i++)
 			for (int j = 0; j < widthOfMap; j++) {
 				if (tileMap[i][j] == 'A')
-					plat.setTextureRect(IntRect(0, 0, ts, ts));
+					plat.setTextureRect(IntRect(0, 0, sizeOfPlate, sizeOfPlate));
 				if (tileMap[i][j] == 'C')
-					plat.setTextureRect(IntRect(ts * int(p.frame), ts * p.rotate, ts, ts));
+					plat.setTextureRect(IntRect(sizeOfPlate * int(player.frameOfPackman), sizeOfPlate * player.rotate, sizeOfPlate, sizeOfPlate));
 				if (tileMap[i][j] == ' ')
-					plat.setTextureRect(IntRect(ts, 0, ts, ts));
+					plat.setTextureRect(IntRect(sizeOfPlate, 0, sizeOfPlate, sizeOfPlate));
 				if (tileMap[i][j] == '1')
-					plat.setTextureRect(IntRect(ts * 5, ts * en.rotate[0], ts, ts));
+					plat.setTextureRect(IntRect(sizeOfPlate * 5, sizeOfPlate * enemy.rotate[0], sizeOfPlate, sizeOfPlate));
 				if (tileMap[i][j] == '2')
-					plat.setTextureRect(IntRect(ts * 5, ts * en.rotate[1], ts, ts));
+					plat.setTextureRect(IntRect(sizeOfPlate * 5, sizeOfPlate * enemy.rotate[1], sizeOfPlate, sizeOfPlate));
 				if (tileMap[i][j] == '3')
-					plat.setTextureRect(IntRect(ts * 5, ts * en.rotate[2], ts, ts));
+					plat.setTextureRect(IntRect(sizeOfPlate * 5, sizeOfPlate * enemy.rotate[2], sizeOfPlate, sizeOfPlate));
 				if (tileMap[i][j] == '4')
-					plat.setTextureRect(IntRect(ts * 5, ts * en.rotate[3], ts, ts));
+					plat.setTextureRect(IntRect(sizeOfPlate * 5, sizeOfPlate * enemy.rotate[3], sizeOfPlate, sizeOfPlate));
 				if (tileMap[i][j] == 'B')
 					continue;
 
-				plat.setPosition(j * ts, i * ts);
+				plat.setPosition(j * sizeOfPlate, i * sizeOfPlate);
 				window.draw(plat);
 			}
 
-		if (q == 171)
+		if (coins == 171)
 			window.draw(youwin);
 		if (!life)
 			window.draw(youlose);
 
 		window.display();
 	}
-
 	return 0;
 }
