@@ -4,27 +4,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="Документация.css">
+    <link rel="stylesheet" href="Documentation.css">
     <title>Документация</title>
 </head>
 
 <body>
-    <h1>Пакман</h1>
+    <h1>Pacman</h1>
 
     <ul>
         <h2 class="One">Разработкой занимался:</h2>
-        <li> Наливайко Александр - Главный разработчик</li>
+
+        <li style="font-size: 20px;"> Наливайко Александр - Главный разработчик</li>
     </ul>
 
-    <h1>Дизайн документа</h1>
+
     <h2>Цель проекта:</h2>
     <div>
-        Создать игру Пакман на языке C++.
+        Разработка 2D-игры "Maze!" с использованием графической библиотеки SFML. Игрок управляет персонажем, собирая
+        монеты, избегая врагов и перемещаясь по лабиринту.
     </div>
 
     <h2>Задачи проекта:</h2>
     <div>
-        <ul class="Spisok">
+        <ul>
             <li>
                 Создание графического интерфейса с использованием платформы Windows Forms.
             </li>
@@ -69,20 +71,20 @@
     </div>
 
 
-    <h2>Игровые механики</h2>
+    <h2>Игровой процесс</h2>
     <div>
-        <ul class="Spisok">
+        <ul>
             <li>
-                Игрок способен управлять персонажем(колобком).
+                Игрок управляет персонажем (Pac-Man), перемещая его по лабиринту.
             </li>
             <li>
-                Игрок должен собрать все монеты на карте без проигрыша.
+                Основная цель — собрать все монеты на карте (171 шт.), избегая врагов.
             </li>
             <li>
-                На карте буду ходить враги в виде призраков.
+                Враги (4 персонажа) перемещаются по лабиринту случайным образом.
             </li>
             <li>
-                Если призрак коснеться колобка, игра окончена.
+                Игра заканчивается победой, если все монеты собраны, или поражением, если игрок сталкивается с врагом.
             </li>
         </ul>
     </div>
@@ -94,158 +96,251 @@
         </ul>
     </div>
 
-
-    <h2>Визуальный стиль:</h2>
+    <h1>Техническая документация</h1>
+    <h2>Карта игры</h2>
     <div>
-        Пиксельная графика 80-х годов.
+        <ul>
+            <li>
+                Карта представлена сеткой размером <strong> 19x21</strong>.
+            </li>
+            <li>
+                Элементы карты:
+                <p>
+                    <span class="kn">'A'</span> — стены.
+                </p>
+                <p> <span class="kn">' '</span> — проход.</p>
+                <p> <span class="kn">'B'</span> — пройденные игроком клетки.</p>
+                <p> <span class="kn">'C'</span> — текущая позиция игрока.</p>
+                <p> <span class="kn">'1', '2', '3', '4'</span> — враги.</p>
+            </li>
+            <li>
+                Края карты соединены — персонажи могут переходить с одного края на другой
+            </li>
+        </ul>
     </div>
 
-    <h1>Техническая документация</h1>
-    <h2>Архитектура система</h2>
+
+    <h2>Основные компоненты кода:</h2>
     <div>
         <p>
-            <a href="https://github.com/RadioDemon1219/Packman.git">Ссылка на Github с игрой</a>
+            <a href="https://github.com/RadioDemon1219/Packman.git">Ссылка на Github с игрой(нажмите)</a>
         </p>
-        <p>
-
-            Для создания проекта использовался язык программирования C++ - компилируемый, статически
-            типизированный язык программирования общего назначения. философия дизайна подчеркивает удобочитаемость кода
-            с использованием значительных отступов.
-
-        </p>
-        <p>
-            Для реализации функциональности мы использовали библиотеки:System, System::Windows::Forms.
-            System::Windows::Forms: Пространство имен, предоставляющее классы для создания приложений с графическим
-            интерфейсом пользователя (GUI) на платформе Windows. В данном коде используются классы, такие как Player и
-            Enemy.
-        </p>
-        <p>
-        <h3>Уровень представления</h3>
         <ul>
-            <li>Форма игры (game_form): Основным интерфейс - карта, состоящая из синих кирпичей, монет, главного героя и
-                4-х врагов</li>
-            <li> Элементы управления:
-                - Кнопки управлния персонажем.
-            </li>
-            <li>Стили и оформление: Настройка внешнего вида элементов управления, включая цвет фона.
-            </li>
-            </p>
-
-            <h3>Логика игры</h3>
-            <ul>
-                <li>Логика игры: Управление персонажем и передвигать его по карте, собирая монеты и опасаясь от врагов.
-                </li>
+            <li> Карта игры <span class="kn">(tileMap)</span>:</li>
+            <p>Массив строк, представляющий игровое поле. Символы определяют объекты на карте.</p>
+            <li>Класс <span class="kn">Player</span>:
+                <p>Управляет логикой игрока:</p>
                 <ul>
-                    <h4>Модели:</h4>
-                    <li>Игрок: Класс, представляющий собой колобка.</li>
-                    <li>Враги: Класс, представляющий собой 4-х призраков.</li>
-                    </li>
+                    <li>Движение в направлениях: вправо, влево, вверх, вниз.</li>
+                    <li>Сбор монет: увеличение счётчика <span class="kn">coins</span>.</li>
+                    <li>Реакция на столкновение с врагами: окончание игры.</li>
+                    <li>Переходы между краями карты.</li>
                 </ul>
+                <p>Основные поля</p>
+                <ul>
+                    <li><span class="kn">x, y</span>: текущие координаты игрока.</li>
+                    <li><span class="kn">newx</span>, <span class="kn">newy</span>: координаты новой позиции после
+                        движения.</li>
+                    <li><span class="kn">rotate</span>: направление движения (1 — вправо, 2 — влево, 3 — вверх, 4 —
+                        вниз).</li>
+                    <li><span class="kn">delayOfStep</span>: задержка между шагами</li>
+                </ul>
+                <p>
+                    Метод <span class="kn">update</span>: Обновляет состояние игрока, включая движение, сбор монет и
+                    обработку столкновений.
+                </p>
+            </li>
+            <li>Класс <span class="kn">Enemy</span>:</li>
+            <p>Управляет логикой врагов:</p>
+            <ul>
+                <li>Случайное движение.</li>
+                <li>Обработка столкновений с игроком.</li>
+                <li>Переходы между краями карты.</li>
+            </ul>
+            <p>Основные поля:</p>
+            <ul>
+                <li>
+                    <span class="kn">x[4]</span>, <span class="kn">y[4]</span>: текущие координаты каждого врага
+                </li>
+                <li><span class="kn">newx[4]</span>, <span class="kn">newy[4]</span>: новые координаты врагов после
+                    движения.</li>
+                <li><span class="kn">rotate[4]</span>: направления движения.</li>
+                <li><span class="kn">delayOfStep</span>: задержка между шагами.</li>
+            </ul>
+            <p>Метод <span class="kn">update</span>: Обновляет позиции врагов и проверяет столкновения с игроком.</p>
+            <li> Главная функция <span class="kn">(main)</span>:</li>
+            <p>Инициализирует окно игры и текстуры.</p>
+            <p>Реализует игровой цикл:</p>
+            <ul>
+                <li>Обработка событий (закрытие окна, управление игроком).</li>
+                <li>Обновление состояния игрока и врагов.</li>
+                <li>Отрисовка карты и элементов интерфейса.</li>
+                <li>Проверка условий завершения игры.</li>
+            </ul>
+        </ul>
+
+        <h3>Используемые технологии:</h3>
+        <ul>
+            <p>Библиотека SFML:</p>
+            <ul>
+                <li>Управление окном, графикой и событиями.</li>
+                <li>Классы: <span class="kn">RenderWindow</span>, <span class="kn">Texture</span>, <span
+                        class="kn">Sprite</span>,<span class="kn">Event</span>.</li>
+            </ul>
+            <p>Язык программирования:</p>
+            <ul>
+                <li>C++</li>
+            </ul>
+
+            <h3>Архитектура программы:</h3>
+            <p>Уровень данных:</p>
+            <ul>
+                <li>Массив <span class="kn">tileMap</span> хранит карту игры.
+                </li>
+                <li>Переменные <span class="kn">coins</span>, <span class="kn">life</span> определяют состояние игры.
+                </li>
+            </ul>
+            <p>Уровень логики:
+            </p>
+            <ul>
+                <li>Классы <span class="kn">Player</span> и <span class="kn">Enemy</span> реализуют поведение
+                    персонажей.</li>
+                <li>Методы <span class="kn">update</span> обновляют состояние объектов.</li>
+            </ul>
+            <p>Уровень представления:
+            </p>
+            <ul>
+                <li>Графические текстуры отображают элементы игры.</li>
+                <li>Интерфейс обновляется в игровом цикле.</li>
             </ul>
     </div>
 
     <h2>Пространство имен</h2>
     <div>
         <p>
-            using namespace sf; - способ использования SFML в качестве мультимедии, чтобы облегчить разработку игры.
+            <span class="kn">using namespace sf;</span> - способ использования SFML в качестве мультимедии, чтобы
+            облегчить разработку игры.
         </p>
+        <p>Пространство имен SFML используется для упрощения доступа к мультимедийным функциям библиотеки, что облегчает
+            разработку игры.</p>
     </div>
 
-    <h2>Приватные переменные</h2>
+    <h2>Константы</h2>
     <div>
         <ul>
-            <li>const int heightOfMap = 21;</li>
-            <li>const int widthOfMap = 19;</li>
-            <li>const int sizeOfPlate = 25.</li>
+            <li class="kn">const int heightOfMap = 21;</li>
+            <p>Высота игрового поля в ячейках.</p>
+            <li class="kn">const int widthOfMap = 19;</li>
+            <p>Ширина игрового поля в ячейках.</p>
+            <li class="kn">const int sizeOfPlate = 25.</li>
+            <p>Размер одной ячейки игрового поля в пикселях.</p>
         </ul>
     </div>
 
     <h2>Элементы управления</h2>
-    <p class="kn">
-        Keyboard::Right;
-    </p>
-    <p class="kn">
-        Keyboard::D;
-    </p>
-    <p class="kn">
-        Keyboard::Left;
-    </p>
-    <p class="kn">
-        Keyboard::A;
-    </p>
-    <p class="kn">
-        Keyboard::Up;
-    </p>
-    <p class="kn">
-        Keyboard::W;
-    </p>
-    <p class="kn">
-        Keyboard::Down;
-    </p>
-    <p class="kn">
-        Keyboard::S;</p>
-    <p>Кнопки для передвижения игрока.
-    </p>
+    <div>
+        <p>Игрок может управлять движением персонажа с помощью следующих клавиш:</p>
+        <ul>
+            <li>Стрелки: <span class="kn">Keyboard::Right</span>, <span class="kn">Keyboard::Left</span>, <span
+                    class="kn">Keyboard::Up</span>,
+                <span class="kn">Keyboard::Down</span>
+            </li>
+            <li>WASD:<span class="kn"> Keyboard::D</span>, <span class="kn">Keyboard::A</span>, <span
+                    class="kn">Keyboard::W</span>, <span class="kn">Keyboard::S</span></li>
+        </ul>
+        <p>Каждая из этих клавиш позволяет игроку перемещаться по карте в соответствующем направлении.</p>
+    </div>
+    <h2>Классы</h2>
+    <div>
+        <h3>Player</h3>
+        <p>Класс, представляющий игрока. Содержит:</p>
+        <ul>
+            <li>Координаты игрока <span class="kn">(x, y)</span></li>
+            <li>Методы управления движением и взаимодействием с объектами карты.</li>
+            <li>Метод <span class="kn">void update()</span> для обновления состояния игрока, включая обработку сбора
+                монет и столкновений.
+            </li>
+        </ul>
+        <h3>Enemy</h3>
+        <p>Класс, представляющий врагов. Содержит:</p>
+        <ul>
+            <li>Координаты и направления движения для каждого врага.</li>
+            <li>Метод <span class="kn">void update()</span> для управления движением врагов и обработки столкновений.
+            </li>
+        </ul>
 
-    <h2>Конструктор</h2>
-    <p class="kn">
-        class Enemy
-    </p>
-    <p class="kn">
-        class Player
-    </p>
-    <p class="kn">
-        public:;
-    </p>
-    <p class="kn">
-        void update();</p>
-    <p> Конструктор класса, который инициализирует основные функции игры.
-    </p>
+    </div>
+    <h2>Настройка элементов</h2>
+    <div>
+        <h3>Основные текстуры и объекты:</h3>
 
-    <h2> Настройка элементов</h2>
-    <p> SetupUI() - Метод инициализации компонентов формы, который устанавливает основные свойства окна, такие
-        как
-        положение, стиль границ, фон и иконку.</p>
+        <ul>
+            <li>Победа:
+                <p class="kn">Texture pictureYouWin;</p>
+                <p>Загрузка текстуры и размещение на экране.</p>
+            </li>
+            <li>Проигрыш:
+                <p class="kn">Texture pictureYouLoose;</p>
+                <p>Загрузка текстуры и размещение на экране.</p>
+            </li>
+            <li>Карта игры:
+                <p class="kn">Texture mapGame;</p>
+                <p>Загрузка текстуры для игрового поля.</p>
+            </li>
+        </ul>
+        <h3>Окно игры</h3>
+        <p>Создание игрового окна:</p>
+        <p class="kn">RenderWindow window(VideoMode(widthOfMap * sizeOfPlate, heightOfMap * sizeOfPlate), "Maze!");
+        </p>
+    </div>
+    <h2>Обработчики событий</h2>
+    <div>
+        <p>В игре предусмотрены следующие обработчики событий:</p>
+        <ul>
+            <li>Движение игрока:
+                <p class="kn">if (coins < 171 && life) { player.update(); enemy.update(); } </p>
+            </li>
+            <li>Отображение победы:
+                <p class="kn">if (coins == 171)
+                    window.draw(youwin);
+                </p>
+            </li>
+            <li>Отображение поражения:
+                <p class="kn">if (!life)
+                    window.draw(youlose);
+                </p>
+            </li>
+        </ul>
+    </div>
+    <h2>Метод обновления карты</h2>
+    <div>
+        <p>Каждый кадр игра обновляет карту, отрисовывая все текстуры, состояния игрока и врагов:</p>
+        <p class="kn">window.clear(Color::Black);
+            for (int i = 0; i < heightOfMap; i++) for (int j=0; j < widthOfMap; j++) { plat.setPosition(j * sizeOfPlate,
+                i * sizeOfPlate); window.draw(plat); } window.display(); </p>
+    </div>
+    <h1>Документации по тестированию</h1>
+    <div>
+        <h2>Тестирование</h2>
+        <p>Успешные сценарии:</p>
+        <ul>
+            <li>Игрок корректно перемещается и собирает монеты.</li>
+            <li>Враги передвигаются случайным образом.</li>
+            <li>Карта отображается корректно.</li>
+        </ul>
+        <p>Неудачные сценарии:</p>
+        <ul>
+            <li>Не обнаружено.</li>
 
-    <h2>SetupUI`</h2>
-
-    <p class="kn">Texture pictureYouWin;
-        pictureYouWin.loadFromFile("../Paint/youwin.png");
-        Sprite youwin(pictureYouWin);
-        youwin.setPosition(100, 210);</p>
-    <p class="kn">Texture mapGame;
-        mapGame.loadFromFile("../Paint/title.png");
-        Sprite plat(mapGame);</p>
-    <p class="kn"> Texture pictureYouLoose;
-        pictureYouLoose.loadFromFile("../Paint/youlose.png");
-        Sprite youlose(pictureYouLoose);
-        youlose.setPosition(100, 210);</p>
-    <p class="kn"> RenderWindow window(VideoMode(widthOfMap * sizeOfPlate, heightOfMap * sizeOfPlate), "Maze!")
-    </p>
-    <p class="kn"> window.clear(Color::Black);</p>
-
-    <h3>Кнопки</h3>
-    <p class="kn"> event.key.code == Keyboard::Right</p>
-    <p class="kn"> event.key.code == Keyboard::D</p>
-    <p class="kn"> event.key.code == Keyboard::Left</p>
-    <p class="kn"> event.key.code == Keyboard::A</p>
-    <p class="kn"> event.key.code == Keyboard::Up</p>
-    <p class="kn"> event.key.code == Keyboard::W</p>
-    <p class="kn"> event.key.code == Keyboard::Down</p>
-    <p class="kn"> event.key.code == Keyboard::S</p>
-    <p> Этот метод позволяет передвигаться по карте игры.</p>
-
-    <h2> Обработчики событий</h2>
-
-    <p class="kn">if (coins < 171 && life) { player.update(); enemy.update(); }`</p>
-            <p class="kn"> if (coins == 171)
-                window.draw(youwin);</p>
-            <p class="kn">if (!life)
-                window.draw(youlose);</p>
-            <h1>Документации по тестированию</h1>
-            <h2>Тестирование</h2>
-            <p>Во время тестирования багов не было обнаружено.</p>
-            </div>
+        </ul>
+        <h2>Возможные улучшения.</h2>
+        <ul>
+            <li>Добавить уровни сложности.</li>
+            <li>Реализовать бонусные предметы.</li>
+            <li>Улучшить управление и анимацию.</li>
+            <li>Добавить аудиоэффекты.</li>
+        </ul>
+    </div>
 </body>
 
 </html

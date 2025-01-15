@@ -7,11 +7,19 @@ body {
     padding: 20px;
 }
 
+p,
+li {
+    margin-bottom: 12px;
+}
 
 h1 {
     color: #228a4a;
     text-align: center;
-    margin-bottom: 20px;
+    margin: 26px;
+}
+
+h1:first-child {
+    font-size: 40px;
 }
 
 h2 {
@@ -32,12 +40,10 @@ ul {
     padding-left: 20px;
 }
 
-.Spisok {
-    list-style-type: disc;
-}
+
 
 a {
-    color: #124927;
+    color: #1a9308;
     text-decoration: none;
 }
 
@@ -54,28 +60,12 @@ div {
     margin: 20px 0;
 }
 
-
-button {
-    background-color: #29b960;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-button:hover {
-    background-color: #29b960;
-}
-
-
 .kn {
     font-family: 'Courier New', Courier, monospace;
     background: #eaeaea;
-    padding: 10px;
+    padding: 7px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 8px;
     background-size: 200px;
 }
 
@@ -83,4 +73,8 @@ button:hover {
     text-align: center;
     color: #1f8a48;
     text-decoration: none;
+}
+
+body {
+    font-size: 17px;
 }
