@@ -40,69 +40,79 @@ class Player {
 public:
 	float frameOfPackman = 0;
 	int x = 9, y = 15;
-	int newx = 0, newy = 0;
+	int newX = 0, newY = 0;
 	int rotate = 1, delayOfStep = 0;
 
 	void update() {
-		frameOfPackman += 0.01;
-		if (frameOfPackman > 5)
-			frameOfPackman -= 5;
 
-        //движение игрока
+
+		frameOfPackman += 0.01;
+		if (frameOfPackman > 5) {
+			frameOfPackman -= 5;
+		}
+
+        
+
 		delayOfStep++;
 		if (delayOfStep >= 900) {
 			switch (rotate)
 			{
 			case 1:
-				if (tileMap[y][newx + 1] != 'A')
-					newx += 1;
+				if (tileMap[y][newX + 1] != 'A')
+					newX += 1;
 				break;
 			case 2:
-				if (tileMap[y][newx - 1] != 'A')
-					newx -= 1;
+				if (tileMap[y][newX - 1] != 'A')
+					newX -= 1;
 				break;
 			case 3:
-				if (tileMap[newy - 1][x] != 'A')
-					newy -= 1;
+				if (tileMap[newY - 1][x] != 'A')
+					newY -= 1;
 				break;
 			case 4:
-				if (tileMap[newy + 1][x] != 'A')
-					newy += 1;
+				if (tileMap[newY + 1][x] != 'A')
+					newY += 1;
 				break;
 			}
 
 			delayOfStep = 0;
 		}
 
-	    //сбор монет игроком
-		if (tileMap[newy][newx] == ' ' || tileMap[newy][newx] == 'B') {
-			if (tileMap[newy][newx] == ' ')
-				coins++;
+	    
 
-			if (tileMap[newy][newx] == '1'
-				|| tileMap[newy][newx] == '2' || tileMap[newy][newx] == '3' || tileMap[newy][newx] == '4')
+		if (tileMap[newY][newX] == ' ' || tileMap[newY][newX] == 'B') {
+			if (tileMap[newY][newX] == ' ') {
+				coins++;
+			}
+
+			if (tileMap[newY][newX] == '1'
+				|| tileMap[newY][newX] == '2' || tileMap[newY][newX] == '3' || tileMap[newY][newX] == '4') {
 				life = false;
+			}
 
 			tileMap[y][x] = 'B';
 
-			tileMap[newy][newx] = 'C';
+			tileMap[newY][newX] = 'C';
 
-			x = newx;
-			y = newy;
+			x = newX;
+			y = newY;
 		}
 
-		//переход из одного края карты в другой
-		if (newy == 9 && (newx == 0 || newx == 18)) {
-			if (newx == 0)
-				newx = 17;
-			else
-				newx = 1;
+		
+
+		if (newY == 9 && (newX == 0 || newX == 18)) {
+			if (newX == 0) {
+				newX = 17;
+			}
+			else {
+				newX = 1;
+			}
 
 			tileMap[y][x] = 'B';
-			tileMap[newy][newx] = 'C';
+			tileMap[newY][newX] = 'C';
 
-			x = newx;
-			y = newy;
+			x = newX;
+			y = newY;
 		}
 	}
 };
@@ -110,7 +120,7 @@ public:
 class Enemy {
 public:
 	int x[4] = { 1, 17 , 1, 17 }, y[4] = { 1, 1, 19, 19 };
-	int newx[4] = { 0 , 0 , 0, 0 }, newy[4] = { 0, 0, 0, 0 };
+	int newX[4] = { 0 , 0 , 0, 0 }, newY[4] = { 0, 0, 0, 0 };
 	int rotate[4] = { 1, 1, 1, 1 }, delayOfStep = 0;
 
 	void update() {
@@ -120,24 +130,25 @@ public:
 			for (int i = 0; i < 4; i++) {
 				rotate[i] = rand() % 4 + 1;
 
-				newx[i] = x[i];
-				newy[i] = y[i];
+				newX[i] = x[i];
+				newY[i] = y[i];
 
 				bool found_empty_space = false;
-				//передвижение врагов
+				
+
 				while (!found_empty_space) {
 					switch (rotate[i]) {
 					case 1:
-						if (tileMap[y[i]][newx[i] + 1] != 'A') {
-							newx[i] += 1;
+						if (tileMap[y[i]][newX[i] + 1] != 'A') {
+							newX[i] += 1;
 							found_empty_space = true;
 						}
 						else {
 							rotate[i] = (rotate[i] % 4) + 1;}
 						break;
 					case 2:
-						if (tileMap[y[i]][newx[i] - 1] != 'A') {
-							newx[i] -= 1;
+						if (tileMap[y[i]][newX[i] - 1] != 'A') {
+							newX[i] -= 1;
 							found_empty_space = true;
 						}
 						else {
@@ -145,8 +156,8 @@ public:
 						}
 						break;
 					case 3:
-						if (tileMap[newy[i] - 1][x[i]] != 'A') {
-							newy[i] -= 1;
+						if (tileMap[newY[i] - 1][x[i]] != 'A') {
+							newY[i] -= 1;
 							found_empty_space = true;
 						}
 						else {
@@ -154,8 +165,8 @@ public:
 						}
 						break;
 					case 4:
-						if (tileMap[newy[i] + 1][x[i]] != 'A') {
-							newy[i] += 1;
+						if (tileMap[newY[i] + 1][x[i]] != 'A') {
+							newY[i] += 1;
 							found_empty_space = true;
 						}
 						else {
@@ -172,47 +183,61 @@ public:
 		}
 
 		for (int i = 0; i < 4; i++) {
-			if (tileMap[newy[i]][newx[i]] == ' ' || tileMap[newy[i]][newx[i]] == 'B' ||
-				tileMap[newy[i]][newx[i]] == 'C') {
-				if (tileMap[newy[i]][newx[i]] == 'B')
+			if (tileMap[newY[i]][newX[i]] == ' ' || tileMap[newY[i]][newX[i]] == 'B' ||
+				tileMap[newY[i]][newX[i]] == 'C') {
+				if (tileMap[newY[i]][newX[i]] == 'B') {
 					tileMap[y[i]][x[i]] = 'B';
-				else if (tileMap[newy[i]][newx[i]] == ' ')
+				}
+				else if (tileMap[newY[i]][newX[i]] == ' ') {
 					tileMap[y[i]][x[i]] = ' ';
-				else if (tileMap[newy[i]][newx[i]] == 'C')
+				}
+				else if (tileMap[newY[i]][newX[i]] == 'C') {
 					life = false;
+				}
 
-				if (i == 0)
-					tileMap[newy[i]][newx[i]] = '1';
-				if (i == 1)
-					tileMap[newy[i]][newx[i]] = '2';
-				if (i == 2)
-					tileMap[newy[i]][newx[i]] = '3';
-				if (i == 3)
-					tileMap[newy[i]][newx[i]] = '4';
+				if (i == 0) {
+					tileMap[newY[i]][newX[i]] = '1';
+				}
+				if (i == 1) {
+					tileMap[newY[i]][newX[i]] = '2';
+				}
+				if (i == 2) {
+					tileMap[newY[i]][newX[i]] = '3';
+				}
+				if (i == 3) {
+					tileMap[newY[i]][newX[i]] = '4';
+				}
 
-				x[i] = newx[i];
-				y[i] = newy[i];
+				x[i] = newX[i];
+				y[i] = newY[i];
 			}
-			//переход из одного края карты в другой
-			if (newy[i] == 9 && (newx[i] == 0 || newx[i] == 18)) {
-				if (newx[i] == 0)
-					newx[i] = 17;
-				else
-					newx[i] = 1;
+			
+
+			if (newY[i] == 9 && (newX[i] == 0 || newX[i] == 18)) {
+				if (newX[i] == 0) {
+					newX[i] = 17;
+				}
+				else {
+					newX[i] = 1;
+				}
 
 				tileMap[y[i]][x[i]] = 'B';
 
-				if (i == 0)
-					tileMap[newy[i]][newx[i]] = '1';
-				if (i == 1)
-					tileMap[newy[i]][newx[i]] = '2';
-				if (i == 2)
-					tileMap[newy[i]][newx[i]] = '3';
-				if (i == 3)
-					tileMap[newy[i]][newx[i]] = '4';
+				if (i == 0) {
+					tileMap[newY[i]][newX[i]] = '1';
+				}
+				if (i == 1) {
+					tileMap[newY[i]][newX[i]] = '2';
+				}
+				if (i == 2) {
+					tileMap[newY[i]][newX[i]] = '3';
+				}
+				if (i == 3) {
+					tileMap[newY[i]][newX[i]] = '4';
+				}
 
-				x[i] = newx[i];
-				y[i] = newy[i];
+				x[i] = newX[i];
+				y[i] = newY[i];
 			}
 		}
 	}
@@ -229,13 +254,13 @@ int main() {
 
 	Texture pictureYouWin;
 	pictureYouWin.loadFromFile("../Paint/youwin.png");
-	Sprite youwin(pictureYouWin);
-	youwin.setPosition(100, 210);
+	Sprite youWin(pictureYouWin);
+	youWin.setPosition(100, 210);
 
 	Texture pictureYouLoose;
 	pictureYouLoose.loadFromFile("../Paint/youlose.png");
-	Sprite youloose(pictureYouLoose);
-	youloose.setPosition(100, 210);
+	Sprite youLoose(pictureYouLoose);
+	youLoose.setPosition(100, 210);
 
 	Player player;
 	Enemy enemy;
@@ -245,31 +270,42 @@ int main() {
 		Event event;
 		while (window.pollEvent(event))
 		{
-			if (event.type == Event::Closed)
+			if (event.type == Event::Closed) {
 				window.close();
-			//управление игроком
-			if (coins < 171 && life)
+			}
+			
+			
+			if (coins < 171 && life) {
 				if (event.type == Event::KeyPressed) {
-					player.newx = player.x;
-					player.newy = player.y;
+					player.newX = player.x;
+					player.newY = player.y;
 
-					if (event.key.code == Keyboard::Right)
+					if (event.key.code == Keyboard::Right) {
 						player.rotate = 1;
-					else if(event.key.code == Keyboard::D)
+					}
+					else if (event.key.code == Keyboard::D) {
 						player.rotate = 1;
-					if (event.key.code == Keyboard::Left)
+					}
+					if (event.key.code == Keyboard::Left) {
 						player.rotate = 2;
-					else if (event.key.code == Keyboard::A)
+					}
+					else if (event.key.code == Keyboard::A) {
 						player.rotate = 2;
-					if (event.key.code == Keyboard::Up)
+					}
+					if (event.key.code == Keyboard::Up) {
 						player.rotate = 3;
-					else if (event.key.code == Keyboard::W)
+					}
+					else if (event.key.code == Keyboard::W) {
 						player.rotate = 3;
-					if (event.key.code == Keyboard::Down)
+					}
+					if (event.key.code == Keyboard::Down) {
 						player.rotate = 4;
-					else if (event.key.code == Keyboard::S)
+					}
+					else if (event.key.code == Keyboard::S) {
 						player.rotate = 4;
+					}
 				}
+			}
 		}
 
 		if (coins < 171 && life) {
@@ -277,7 +313,8 @@ int main() {
 			enemy.update();
 		}
 		window.clear(Color::Black);
-		//преображение карты
+		
+
 		for (int i = 0; i < heightOfMap; i++)
 			for (int j = 0; j < widthOfMap; j++) {
 				if (tileMap[i][j] == 'A')
@@ -302,9 +339,9 @@ int main() {
 			}
 
 		if (coins == 171)
-			window.draw(youwin);
+			window.draw(youWin);
 		if (!life)
-			window.draw(youloose);
+			window.draw(youLoose);
 
 		window.display();
 	}
